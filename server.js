@@ -87,7 +87,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-let browser;
+
 
 (async () => {
   const browser = await puppeteer.launch(); // launch a browser (chromium by default but you can chose another one)
