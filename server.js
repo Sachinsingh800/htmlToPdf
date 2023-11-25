@@ -79,32 +79,39 @@ app.listen(PORT, () => {
 
 
 
-require("dotenv/config")
-const puppeteer = require('puppeteer');
+require('dotenv').config(); // Load environment variables from a .env file
+
 const express = require('express');
-const cors = require("cors")
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const puppeteer = require('puppeteer-core');
+
 const app = express();
 
-  
 // Middleware to parse JSON body
 app.use(bodyParser.json());
 
 app.use(cors());
 
-
+// Example code to test the background page
 (async () => {
-  try {
-    await puppeteer.defaultArgs({
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        headless: 'new',
-    });
-  } catch (error) {
-    console.error('Error setting default args for Puppeteer:', error);
-  }
+  const browser = await puppeteer.launch({
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    headless: true, // or false if you need a non-headless browser
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+
+  const backgroundPageTarget = await browser.waitForTarget(
+    (target) => target.type() === 'background_page'
+  );
+
+  const backgroundPage = await backgroundPageTarget.page();
+
+  // Test the background page as you would any other page.
+
+  await browser.close();
 })();
 
 app.get('/', async (req, res) => {
@@ -125,7 +132,12 @@ app.post('/convert', async (req, res) => {
       return res.status(400).send('HTML code and CSS styles are required.');
     }
 
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({
+      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
     const page = await browser.newPage();
 
     // Set content to the page
@@ -154,6 +166,7 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 
 
