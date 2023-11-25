@@ -95,10 +95,12 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       ignoreDefaultArgs: ['--disable-extensions'],
       headless: 'new',
+    }).catch((error) => {
+      console.error('Error launching Puppeteer:', error);
     });
+    
     
     // Add console log for executable path
     const executablePath = puppeteer.executablePath();
