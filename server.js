@@ -98,13 +98,14 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: "C:\Program Files\Google\Chrome\Application\chrome.exe",
       headless: 'new',
+      dumpio: true, // Add this line for additional debug info
     });
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
   }
+  
 })();
 
 app.get('/', async (req, res) => {
