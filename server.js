@@ -75,7 +75,6 @@ app.listen(PORT, () => {
 
  */
 
-
 require("dotenv/config");
 const puppeteer = require('puppeteer');
 const express = require('express');
@@ -85,22 +84,20 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
-
 // Middleware to parse JSON body
 app.use(bodyParser.json());
 
 app.use(cors());
 
-
+let browser;
 
 (async () => {
   try {
-    browser = await puppeteer.launch().catch((error) => {
-      console.error('Error launching Puppeteer:', error);
+    browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--disable-extensions'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true, 
     });
-    // Add console log for executable path
-    const executablePath = puppeteer.executablePath();
-    console.log('Executable Path:', executablePath);
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
   }
@@ -122,12 +119,6 @@ app.post('/convert', async (req, res) => {
 
     if (!html || !cssStyles) {
       return res.status(400).send('HTML code and CSS styles are required.');
-    }
-
-    // Ensure that the browser is not closed before creating a new page
-    if (browser && !browser.isConnected()) {
-      console.error('Error: Puppeteer browser is not connected.');
-      return res.status(500).send('Error generating PDF');
     }
 
     const page = await browser.newPage();
