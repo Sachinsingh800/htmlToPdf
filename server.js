@@ -95,17 +95,28 @@ app.use(cors());
 
 let browser;
 
-(async () => {
+(async function() {
+
   try {
-    browser = await puppeteer.launch({
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      headless: 'new',
-      dumpio: true, // Add this line for additional debug info
-    });
-  } catch (error) {
-    console.error('Error launching Puppeteer:', error);
-  }
-  
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.setContent(pdfOutput);
+  await page.emulateMedia("screen");
+  await page.pdf({
+    path: "routes/planiton/pdf/mypdf.pdf",
+    format: "A4",
+    printBackground: true
+  });
+
+  console.log('done');
+  await browser.close();
+  //process.exit();
+
+} catch (e) {
+  console.log("Our Error", e)
+}
 })();
 
 app.get('/', async (req, res) => {
