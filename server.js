@@ -93,13 +93,12 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+let browser;
+
 (async () => {
   try {
-    const executablePath = puppeteer.executablePath();
-    console.log('Chromium Executable Path:', executablePath);
-
-    const browser = await puppeteer.launch({
-      executablePath,
+    browser = await puppeteer.launch({
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       headless: 'new',
     });
@@ -126,7 +125,6 @@ app.post('/convert', async (req, res) => {
       return res.status(400).send('HTML code and CSS styles are required.');
     }
 
-    const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
     // Set content to the page
@@ -137,8 +135,6 @@ app.post('/convert', async (req, res) => {
       format: 'Letter',
       margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' },
     });
-
-    await browser.close();
 
     // Send PDF as a response
     res.setHeader('Content-Type', 'application/pdf');
@@ -155,6 +151,8 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
 
 
 
