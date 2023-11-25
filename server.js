@@ -88,17 +88,19 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+  
 // Middleware to parse JSON body
 app.use(bodyParser.json());
 
 app.use(cors());
 
+
 (async () => {
   try {
-    await puppeteer.launch({
-        executablePath: "C:\Program Files\Google\Chrome\Application\chrome.exe",
+    await puppeteer.defaultArgs({
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        headless: true, // Use 'true' for headless mode
+        headless: 'new',
     });
   } catch (error) {
     console.error('Error setting default args for Puppeteer:', error);
@@ -123,7 +125,7 @@ app.post('/convert', async (req, res) => {
       return res.status(400).send('HTML code and CSS styles are required.');
     }
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
     // Set content to the page
