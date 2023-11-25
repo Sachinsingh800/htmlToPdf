@@ -84,7 +84,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const browser = await puppeteer.launch();
+
 
 // Middleware to parse JSON body
 app.use(bodyParser.json());
@@ -95,14 +95,9 @@ app.use(cors());
 
 (async () => {
   try {
-    browser = await puppeteer.launch({
-      ignoreDefaultArgs: ['--disable-extensions'],
-      headless: 'new',
-    }).catch((error) => {
+    browser = await puppeteer.launch().catch((error) => {
       console.error('Error launching Puppeteer:', error);
     });
-    
-    
     // Add console log for executable path
     const executablePath = puppeteer.executablePath();
     console.log('Executable Path:', executablePath);
