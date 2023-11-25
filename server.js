@@ -76,8 +76,6 @@ app.listen(PORT, () => {
  */
 
 
-
-
 require("dotenv/config");
 const puppeteer = require('puppeteer');
 const express = require('express');
@@ -97,11 +95,14 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",  
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       ignoreDefaultArgs: ['--disable-extensions'],
       headless: 'new',
     });
     
+    // Add console log for executable path
+    const executablePath = puppeteer.executablePath();
+    console.log('Executable Path:', executablePath);
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
   }
@@ -123,6 +124,12 @@ app.post('/convert', async (req, res) => {
 
     if (!html || !cssStyles) {
       return res.status(400).send('HTML code and CSS styles are required.');
+    }
+
+    // Ensure that the browser is not closed before creating a new page
+    if (browser && !browser.isConnected()) {
+      console.error('Error: Puppeteer browser is not connected.');
+      return res.status(500).send('Error generating PDF');
     }
 
     const page = await browser.newPage();
@@ -151,6 +158,7 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 
 
