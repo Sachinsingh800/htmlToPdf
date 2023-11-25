@@ -98,7 +98,7 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
-      executablePath: "C:\Program Files\Google\Chrome\Application\chrome.exe",
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       headless: 'new',
       dumpio: true, // Add this line for additional debug info
     });
