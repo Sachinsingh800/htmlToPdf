@@ -94,9 +94,10 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",  // Set the path to your Chrome executable
       ignoreDefaultArgs: ['--disable-extensions'],
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true, 
+      headless: false, // Use 'true' for headless mode
     });
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
