@@ -97,8 +97,9 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
+      executablePath: "C:\Program Files\Google\Chrome\Application\chrome.exe",  
       ignoreDefaultArgs: ['--disable-extensions'],
-      headless: 'new', // Change 'true' to 'new'
+      headless: 'new',
     });
     
   } catch (error) {
