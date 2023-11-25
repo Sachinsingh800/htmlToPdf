@@ -84,13 +84,14 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+
 app.use(bodyParser.json());
 app.use(cors());
 
 let browser;
 
 (async () => {
-  const proxy = await setupServer(3001);
+
   const server = await setupServer(3001);
 
   const browser = await puppeteer.launch({
