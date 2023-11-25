@@ -84,9 +84,7 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
-// Middleware to parse JSON body
 app.use(bodyParser.json());
-
 app.use(cors());
 
 let browser;
@@ -94,10 +92,9 @@ let browser;
 (async () => {
   try {
     browser = await puppeteer.launch({
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",  // Set the path to your Chrome executable
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       ignoreDefaultArgs: ['--disable-extensions'],
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: false, // Use 'true' for headless mode
+      headless: 'new',
     });
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
@@ -122,6 +119,12 @@ app.post('/convert', async (req, res) => {
       return res.status(400).send('HTML code and CSS styles are required.');
     }
 
+    // Ensure the browser is properly launched before creating a new page
+    if (!browser) {
+      console.error('Browser is not properly launched');
+      return res.status(500).send('Error generating PDF');
+    }
+
     const page = await browser.newPage();
 
     // Set content to the page
@@ -132,6 +135,9 @@ app.post('/convert', async (req, res) => {
       format: 'Letter',
       margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' },
     });
+
+    // Close the page after generating the PDF
+    await page.close();
 
     // Send PDF as a response
     res.setHeader('Content-Type', 'application/pdf');
@@ -148,8 +154,6 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
 
 
 
