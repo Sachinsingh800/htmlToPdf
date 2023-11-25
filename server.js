@@ -132,9 +132,11 @@ app.post('/convert', async (req, res) => {
       return res.status(400).send('HTML code and CSS styles are required.');
     }
 
+    console.log('Chrome executable path:', 'C:/Program Files/Google/Chrome/Application/chrome.exe');
     const browser = await puppeteer.launch({
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      headless: true,
+        executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     
 
