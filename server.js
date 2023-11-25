@@ -84,13 +84,14 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const browser = await puppeteer.launch();
 
 // Middleware to parse JSON body
 app.use(bodyParser.json());
 
 app.use(cors());
 
-let browser;
+
 
 (async () => {
   try {
