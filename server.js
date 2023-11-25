@@ -79,33 +79,32 @@ app.listen(PORT, () => {
 
 
 
-require("dotenv/config")
+require("dotenv/config");
 const puppeteer = require('puppeteer');
 const express = require('express');
-const cors = require("cors")
+const cors = require("cors");
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const app = express();
 
-  
 // Middleware to parse JSON body
 app.use(bodyParser.json());
 
 app.use(cors());
 
-
 (async () => {
   try {
+    const executablePath = puppeteer.executablePath();
+    console.log('Chromium Executable Path:', executablePath);
 
-    await puppeteer.defaultArgs({
-      
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        headless: 'new',
+    const browser = await puppeteer.launch({
+      executablePath,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: 'new',
     });
   } catch (error) {
-    console.error('Error setting default args for Puppeteer:', error);
+    console.error('Error launching Puppeteer:', error);
   }
 })();
 
@@ -120,7 +119,6 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/convert', async (req, res) => {
-
   try {
     const { html, cssStyles } = req.body;
 
