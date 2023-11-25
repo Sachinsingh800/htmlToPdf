@@ -78,7 +78,6 @@ app.listen(PORT, () => {
 
 
 
-
 require("dotenv/config");
 const puppeteer = require('puppeteer');
 const express = require('express');
@@ -95,28 +94,14 @@ app.use(cors());
 
 let browser;
 
-(async function() {
-
+(async () => {
   try {
-
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  await page.setContent(pdfOutput);
-  await page.emulateMedia("screen");
-  await page.pdf({
-    path: "routes/planiton/pdf/mypdf.pdf",
-    format: "A4",
-    printBackground: true
-  });
-
-  console.log('done');
-  await browser.close();
-  //process.exit();
-
-} catch (e) {
-  console.log("Our Error", e)
-}
+    browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--disable-extensions'],
+    });
+  } catch (error) {
+    console.error('Error launching Puppeteer:', error);
+  }
 })();
 
 app.get('/', async (req, res) => {
@@ -163,8 +148,6 @@ const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
 
 
 
