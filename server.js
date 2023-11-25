@@ -133,7 +133,7 @@ app.post('/convert', async (req, res) => {
     }
 
     const browser = await puppeteer.launch({
-      executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe',
+      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
       headless: true,
     });
     
