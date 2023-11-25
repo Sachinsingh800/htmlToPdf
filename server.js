@@ -98,7 +98,9 @@ let browser;
   try {
     browser = await puppeteer.launch({
       ignoreDefaultArgs: ['--disable-extensions'],
+      headless: 'new', // Change 'true' to 'new'
     });
+    
   } catch (error) {
     console.error('Error launching Puppeteer:', error);
   }
